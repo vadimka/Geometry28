@@ -2,14 +2,23 @@
 
 Drawer::Drawer(QWidget *parent) :
     QWidget (parent) {
+    this->setMouseTracking(true);
 }
 
 
 Drawer::Drawer(QWidget *parent, const Graph <Point2D> & poly) :
     QWidget (parent),
     poly (poly) {
+        this->setMouseTracking(true);
 }
 
+void Drawer::mouseMoveEvent(QMouseEvent *event)
+{
+    int ptXCoord = (event->x() - offsetx) / scale;
+    int ptYCoord = (event->y() - offsety) / scale;
+    emit mouseMoved(ptXCoord, ptYCoord);
+
+}
 
 void Drawer::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
@@ -21,6 +30,13 @@ void Drawer::mousePressEvent(QMouseEvent *event) {
         int ptXCoord = (event->x() - offsetx) / scale;
         int ptYCoord = (event->y() - offsety) / scale;
 
+
+ //       std::stringstream ss;
+//        ss << ptXCoord << "   " << ptYCoord << std::endl;
+
+       // std::cout << ptXCoord << "   " << ptYCoord << std::endl;
+
+
         for (unsigned int i = 0; i < poly.getVertexCount(); ++i) {
             Point2D curr = poly.getVertex(i);
             if (abs(curr.getX() - ptXCoord) < (3 / scale) && abs(curr.getY() - ptYCoord) < (3 / scale)) {
@@ -29,6 +45,10 @@ void Drawer::mousePressEvent(QMouseEvent *event) {
             }
         }
     }
+
+ //   int x = (QCursor::pos()).x();
+ //   int y = (QCursor::pos()).y();
+
 }
 
 
@@ -61,8 +81,8 @@ void Drawer::paintEvent(QPaintEvent *event) {
     painter0.setFont(QFont("Arial", 8, QFont::Bold));
 
     //Draw (0, 0)
-    painter0.setBrush(QBrush(Qt::black, Qt::SolidPattern));
-    painter0.drawEllipse (offsetx - scale * radius, offsety - scale * radius, sqrt(scale) * radius * 2, sqrt(scale) * radius * 2);
+ //   painter0.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+ //   painter0.drawEllipse (offsetx - scale * radius, offsety - scale * radius, sqrt(scale) * radius * 1.2, sqrt(scale) * radius * 1.2);
 
     //Draw points
     painter0.setBrush(QBrush(Qt::red, Qt::SolidPattern));
@@ -84,16 +104,19 @@ void Drawer::paintEvent(QPaintEvent *event) {
     }
 
     //Draw lines
-    /*
-    painter0.setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
-    for (unsigned int i = 0; i < poly.getEdgeCount(); ++i) {
-        int xVertex = poly.getEdge(i).first;
-        int yVertex = poly.getEdge(i).second;
 
-        painter0.drawLine (offsetx + scale * (poly.getVertex(xVertex).getX()), offsety + scale * (poly.getVertex(xVertex).getY()),
-                           offsetx + scale * (poly.getVertex(yVertex).getX()), offsety + scale * (poly.getVertex(yVertex).getY()));
+    painter0.setBrush(QBrush(Qt::transparent, Qt::SolidPattern));
+    if(poly.vertices.size() > 1 && (connect > 0))
+    {
+        for (unsigned int i = 0; i < connect; i += 2) {
+
+            if( (i+1) < (connect))
+                painter0.drawLine (offsetx + scale * (poly.getVertex(i).getX()), offsety + scale * (poly.getVertex(i).getY()),
+                            offsetx + scale * (poly.getVertex(i + 1).getX()), offsety + scale * (poly.getVertex(i + 1).getY()));
+        }
+
     }
-*/
+     //   connect = false;
     if (event) {} //this magic code removes warning
 }
 

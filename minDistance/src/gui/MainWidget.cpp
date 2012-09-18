@@ -10,6 +10,7 @@ MainWidget::MainWidget()
         processButton ("min dist"),
         fileNameExport ("output.txt"),
         fileNameInput ("test.txt"),
+    //  label("lol"),
         visualizer (this) {
 
     tabs.addTab(&visualizer, "Visualizer");
@@ -18,6 +19,8 @@ MainWidget::MainWidget()
     mainLay.addWidget(&controlWidget, 0, 1);
     this->setLayout(&mainLay);
 
+    this->setMouseTracking(true);
+
     controlWidgetLay.addWidget(&importFromFileButton, 0, 0);
     controlWidgetLay.addWidget(&fileNameInput, 1, 0);
     controlWidgetLay.addWidget(&processButton, 2, 0);
@@ -25,6 +28,7 @@ MainWidget::MainWidget()
     controlWidgetLay.addWidget(&exportButton, 6, 0);
     controlWidgetLay.addWidget(&fileNameExport, 7, 0);
     controlWidgetLay.addWidget(&exitButton, 8, 0);
+    controlWidgetLay.addWidget(&label, 9, 0);
     controlWidget.setLayout(&controlWidgetLay);
     controlWidget.setMaximumWidth(200);
 
@@ -35,16 +39,33 @@ MainWidget::MainWidget()
     QObject::connect(&exportButton, SIGNAL(clicked()), this, SLOT(clickedExportButton()));
     QObject::connect(&processButton, SIGNAL(clicked()), this, SLOT(clickedProcessButton()));
     QObject::connect(&importFromFileButton, SIGNAL(clicked()), this, SLOT(clickedImportFromFileButton()));
+    QObject::connect(&visualizer, SIGNAL(mouseMoved(int,int)), this, SLOT(updateLabel(int,int)));
     QObject::connect(&visualizer, SIGNAL(pointAdded(Point2D)), this, SLOT(addPoint(Point2D)));
     QObject::connect(&visualizer, SIGNAL(pointRemoved(unsigned int)), this, SLOT(removePoint(unsigned int)));
 }
 
 
+void MainWidget::updateLabel(int x, int y)
+{
+    std::string str;
+    char c[20];
+
+    str += "X:  ";
+    itoa(x, c, 10);
+    str.append(c);
+    str += "    Y:  ";
+    itoa(y, c, 10);
+    str.append(c);
+    label.setText(QString(str.c_str()));
+}
+
 void MainWidget::addPoint(Point2D arg) {
+    visualizer.connect = false;
     poly.addVertex(arg);
 //    poly.connectVertices();
     visualizer.replacePoly(poly);
     visualizer.update();
+
 }
 
 
@@ -85,15 +106,22 @@ void MainWidget::clickedProcessButton() {
 
     std::vector<Point2D> ans = mainf(poly.vertices);
  //   poly.vertices.clear();
+    visualizer.connect = ans.size();
+    ans.insert(ans.end(), poly.vertices.begin(), poly.vertices.end());
+
     visualizer.replacePoly(ans);
     visualizer.update();
-
     std::cout << "ANSWER" << std::endl;
-    for (unsigned int i = 0; i < ans.size(); ++i)
+
+    for (unsigned int i = 0; i < visualizer.connect; i++)
     {
-        std::cout << ans[i].getX()<< ' ' << ans[i].getY() << std::endl;
+        std::cout << ans[i].getX()<< ' ' << ans[i].getY() << '\t';
+        if(i % 2 == 1 ) std::cout << std::endl;
+
     }
     std::cout << std::endl;
+
+
 }
 
 

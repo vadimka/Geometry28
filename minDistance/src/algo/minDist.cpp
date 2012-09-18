@@ -2,7 +2,8 @@
 using namespace std;
 
 
-pt A[NUMBER];
+static pt A[NUMBER];
+static pt B[NUMBER];
 
 inline bool cmp_x (const pt & a, const pt & b) {
     return a.x < b.x || a.x == b.x && a.y < b.y;
@@ -17,7 +18,9 @@ static int ansA[NUMBER], ansB[NUMBER];
 static int nmbr = 0;
 
 inline void updAns (const pt & a, const pt & b) {
+
     double dist = sqrt ((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y) + .0);
+
     if ( dist == minDist ) {
         nmbr++;
         ansA[nmbr] = a.id;
@@ -66,17 +69,33 @@ std::vector<Point2D>  mainf (std::vector<Point2D> set) {
         A[i].id = i+1;
     }
 
+    minDist = 9e307;
     sort (A, A+N, &cmp_x);
-    minDist = 1000000;
     rec (0, N-1);
-    cout << "Минимальное расстояние: " << minDist << endl;
+    cout << "minDist: " << minDist << endl;
     std::vector<Point2D> result;
 
-    for (int i=0; i<= nmbr; i++) {
+    for (int i=0; i <= nmbr; i++) {
         result.push_back(set[ansA[i] - 1]);
         result.push_back(set[ansB[i] - 1]);
-        cout << "Точка№" << ansA[i] << " Точка№" << ansB[i] << endl;
+     //   cout << "Точка№" << ansA[i] << " Точка№" << ansB[i] << endl;
     }
+
     return result;
+
+}
+
+void bust (std::vector<Point2D> set) {
+
+    int N = set.size();
+
+    minDist = 9e307;
+    for (int i=0; i<N; i++) {
+        for (int j=i+1; j<N; j++) {
+         updAns (A[i], A[j]);
+        }
+    }
+
+    cout << "minDist = " << minDist << endl;
 
 }

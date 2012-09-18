@@ -5,6 +5,7 @@
 #include <iostream>
 #include <QWidget>
 #include <QLayout>
+#include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QTabWidget>
@@ -12,10 +13,11 @@
 #include "src/gui/Drawer.h"
 #include "src/objects/Graph.h"
 #include "src/algo/minDist.h"
+#include "src/algo/validator.h"
 
 class MainWidget : public QWidget {
     Q_OBJECT
-    
+
 protected:
     QTabWidget tabs;
     QWidget controlWidget;
@@ -30,6 +32,7 @@ protected:
     QPushButton processButton;
 
 
+
     QLineEdit fileNameExport;
     QLineEdit fileNameInput;
 
@@ -39,6 +42,7 @@ protected:
 
 public:
     MainWidget();
+        QLabel label;
     
 public slots:
     void addPoint (Point2D);
@@ -48,6 +52,7 @@ public slots:
     void clickedImportFromFileButton();
     void clickedProcessButton();
     void removePoint (unsigned int);
+    void updateLabel(int x, int y);
 
 signals:
     void performExitButtonAction();

@@ -10,7 +10,7 @@
 #include <QMouseEvent>
 #include "src/objects/Graph.h"
 #include "src/objects/Point2D.h"
-
+//#include "src/gui/MainWidget.h"
 
 class Drawer : public QWidget {
     Q_OBJECT
@@ -23,7 +23,9 @@ public:
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
     void replacePoly (const Graph <Point2D> &poly);
+    void mouseMoveEvent(QMouseEvent *);
 
+    int connect;
 protected:
     int offsetx;
     int offsety;
@@ -33,6 +35,8 @@ protected:
 signals:
     void pointAdded (Point2D);
     void pointRemoved (unsigned int);
+    void mouseMoved(int x, int y);
+
 };
 
 #endif // DRAWER_H
