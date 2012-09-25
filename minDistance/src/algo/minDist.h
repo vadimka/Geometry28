@@ -6,7 +6,7 @@
 #include "src/objects/Point2D.h"
 #include <cmath>
 #include <vector>
-#define NUMBER 10000
+#define NUMBER 10000000
 using namespace std;
 
 struct pt {

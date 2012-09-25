@@ -1,1 +1,1 @@
-[--test] [--check] [numberOfPoints]
+[--test] [--check] [numberOfPoints] [srandNumber]

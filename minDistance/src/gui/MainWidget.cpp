@@ -48,13 +48,19 @@ MainWidget::MainWidget()
 void MainWidget::updateLabel(int x, int y)
 {
     std::string str;
-    char c[20];
+    string c;
 
     str += "X:  ";
-    itoa(x, c, 10);
+    std::ostringstream oss;
+    oss<<x;
+    c = oss.str();
+    //itoa(x, c, 10);
     str.append(c);
     str += "    Y:  ";
-    itoa(y, c, 10);
+    std::ostringstream oss2;
+    oss2<<y;
+    c = oss2.str();
+    //itoa(y, c, 10);
     str.append(c);
     label.setText(QString(str.c_str()));
 }

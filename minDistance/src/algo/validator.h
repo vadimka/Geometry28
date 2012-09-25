@@ -8,12 +8,14 @@
 #include <set>
 
 #define TEST_SIZE 10000
+#define SRAND_NMBR 100
 
 class Validator
 {
 public:
 
     static int test_size;
+    static int srand_nmbr;
     std::vector<Point2D> ans;
     std::vector<Point2D> points;
     void generate();
